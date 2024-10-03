@@ -1,0 +1,9 @@
+.head_class{
+    border:  1px solid red;
+}
+#div1{
+    border:  1px solid hsl(0, 0%, 2%);
+    /* padding: 50px; */
+    margin: 10px;
+    
+}
