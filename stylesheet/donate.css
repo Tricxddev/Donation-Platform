@@ -1,9 +1,42 @@
 .head_class{
-    border:  1px solid red;
+    border:  2px solid rgb(0, 213, 255);
+    /* height: 2cm; */
+    /* margin: 20px; */
+    /* padding: 10px; */
+    /* position: relative; */
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
 }
-#div1{
-    border:  1px solid hsl(0, 0%, 2%);
-    /* padding: 50px; */
-    margin: 10px;
+.div1{
+    border:  2px solid red;
+    /* display: inline-flex; */
+    /* margin: 10px; */
+    width: 200px;
+    height: 2cm;
+
+}
+.div2{
+    border:  2px solid  rgb(0, 21, 255);
+    /* display: inline-flex; */
+    /* margin: 10px; */
+    width: 300px;
+    height: 2cm;
+}
+.div3{
+    border:  2px solid green;
+    /* display: inline-flex; */
+    /* margin: 10px; */
+    width: 200px;
+    height: 2cm;
+    flex: 1;
     
+}
+.div4{
+    border:  2px solid rgb(128, 0, 73);
+    /* display: inline-flex; */
+    /* margin: 10px; */
+    width: 200px;
+    height: 2cm;
+
 }
