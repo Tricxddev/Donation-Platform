@@ -67,25 +67,32 @@
     margin-top: 30px;
     border: 2px solid red;
     display: flex;
+    padding: 10px;
+    /* justify-content: space-around; */
 }
 
 .foot_div1{
     border: 2px solid purple;
     height: 80px;
-    width: 50px;
+    flex: 1;
 }
 .foot_div2{
     border: 2px solid yellow;
     height: 80px;
-    width: 50px;
+    /* width: 10cm; */
+    flex: 1;
+    margin-left: 10px;
 }
 .foot_div3{
     border: 2px solid greenyellow;
     height: 80px;
-    width: 50px;
+    /* width: 10cm; */
+    flex: 1;
+    margin-left: 10px;
 }
 .foot_div4{
     border: 2px solid coral;
     height: 80px;
-    width: 50px;
+    flex: 1;
+    margin-left: 10px;
 }
