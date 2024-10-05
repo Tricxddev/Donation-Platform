@@ -96,3 +96,15 @@
     flex: 1;
     margin-left: 10px;
 }
+
+#logo_head{
+    height: 2cm;
+    width: 2cm;
+    display: inline-flex;
+    margin-left: 125px;
+    position: relative;
+}
+
+.head_div1 h3{
+
+}
