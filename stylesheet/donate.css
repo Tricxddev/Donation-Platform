@@ -15,6 +15,7 @@
     margin: 10px;
     width: 200px;
     height: 2cm;
+    padding: 5px;
 
 }
 .head_div2{
@@ -98,13 +99,30 @@
 }
 
 #logo_head{
-    height: 2cm;
-    width: 2cm;
+    height: 1.5cm;
+    width: 1.5cm;
     display: inline-flex;
-    margin-left: 125px;
+    /* margin-left: 125px; */
     position: relative;
+    padding-top: 5px;
+
+}
+.head_div1{
+    display: flex;
+
 }
 
-.head_div1 h3{
+#platform_title{
+    border: 2px solid orange;
+    /* flex: 1; */
+    /* width: 1cm; */
+    padding-left: 9px;
 
+}
+
+#platform_logo{
+    border: 2px solid indigo;
+    /* width: 1cm; */
+    flex: 1;
+    
 }
