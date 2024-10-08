@@ -1,9 +1,12 @@
 //dependencies
 const express =require("express")
 const dotenv =require("dotenv")
+const jwt=require("jsonwebtoken")
+const bcrypt=require("bcrypt")
 //paths
 const dbconnect=require("./db")
 const {causeModel,organizerModel}=require("./models/users_db")
+const  {mailCheck} =require("./middleware/validateOrg")
 
 //configs
 const app=express()
@@ -24,8 +27,24 @@ app.get("/test",(req,res)=>{
 })
 
 
-app.post("/registerOrg",(req,res)=>{
-    const   {organizerName,organizerMail,organizerPassWord}=req.body
+app.post("/regOrgUser",mailCheck,async(req,res)=>{
+    try{
+        const  {organizerName,userMail,organizerPassWord}=req.body
+
+    const passHash = bcrypt.hash(organizerPassWord,12)
+
+    const newOrgUser = new organizerModel({
+                            organizerName,
+                            userMail,
+                            organizerPassWord:passHash})
+     const savedUser =  await newOrgUser.save()
+
+     return res.status(200).json({
+        msg:"SUCCESSFUL",
+        savedUser
+        // A SUCCESSFUL RESGISTRATION MAIL MUST BE SENT TO THE USER'S MAIL
+     })
+    }catch(error){return res.status(400).json({msg:error.message})}    
 
 })
 

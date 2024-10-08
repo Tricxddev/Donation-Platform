@@ -12,7 +12,7 @@ const causeModel = new mongoose.model("causeModel",causeSchema);
 
 const organizerSchema = new mongoose.Schema({
     organizerName:{type:String,require:true},
-    organizerMail:{type:String,require:true},
+    userMail:{type:String,require:true},
     organizerPassWord:{type:String,require:true,unique:true}    
 })
 
