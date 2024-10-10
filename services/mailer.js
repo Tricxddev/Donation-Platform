@@ -1,7 +1,10 @@
 const nodemailer = require("nodemailer")
+const dotenv =require("dotenv")
+// const userDb = require("../models/users_db")
 
+// const orgName= userDb.organizerModel.orgName
 
-const mailBot = async(userMail)=>{
+const mailBot = async(orgMail,orgName)=>{
 
     const sender = nodemailer.createTransport({
         service:'gmail',
@@ -13,7 +16,8 @@ const mailBot = async(userMail)=>{
 
     const sendDetails= {
         from:process.env.botMail,
-        to:userMail,
+        to:orgMail,
+        subject: `DONATION PLATFORM`,
         html:`<h1>WELCOME,${orgName}</h1>
             <p>Your Account have been Succesfully creeated, 
             Kindly click the link below to get Started </p>

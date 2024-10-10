@@ -31,8 +31,12 @@ app.get("/test",(req,res)=>{
 app.post("/regOrgUser",mailCheck,async(req,res)=>{
     try{
         const  {orgName,orgMail,orgPassWord,orgDetails}=req.body
+    const mailCheck = await organizerModel.findOne({orgMail})
+    if(mailCheck){
+        return res.status(401).json({msg:"USER ALREADY EXISTS"})
+    }
 
-    const passHash = bcrypt.hash(orgPassWord,12)
+    const passHash = await bcrypt.hash(orgPassWord,12)
 
     const newOrgUser = new organizerModel({
         orgName,
@@ -42,12 +46,11 @@ app.post("/regOrgUser",mailCheck,async(req,res)=>{
     })
      const savedUser =  await newOrgUser.save()
      if(savedUser){
-        mailBot(orgMail)
+        mailBot(orgMail,orgName)
      }else{
-        !mailBot(orgMail)
+        return res.status(402).json({msg:"SAVE USER NOT SUCCESSFUL"})
      }
    
-
      return res.status(200).json({
         msg:"SUCCESSFUL",
         savedUser

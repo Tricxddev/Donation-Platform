@@ -1,12 +1,12 @@
 
 const mailCheck = async(req,res,next)=>{
-    const  orgMail=req.body
+    const  {orgMail} =req.body
     if(!orgMail){
         return resizeBy.status(400).json({msg:"This field Should not be Empty, Please Fill"})
     }
-    // if(!validEmail(orgMail)){
-    //     return res.status(400).json({msg:"Wrong Mail format"})
-    // }
+    if(!validEmail(orgMail)){
+        return res.status(400).json({msg:"Wrong Mail format"})
+    }
 
     next()
 }
