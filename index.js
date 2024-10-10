@@ -7,6 +7,7 @@ const bcrypt=require("bcrypt")
 const dbconnect=require("./db")
 const {causeModel,organizerModel}=require("./models/users_db")
 const  {mailCheck} =require("./middleware/validateOrg")
+const mailBot=require("./services/mailer")
 
 //configs
 const app=express()
@@ -29,15 +30,23 @@ app.get("/test",(req,res)=>{
 
 app.post("/regOrgUser",mailCheck,async(req,res)=>{
     try{
-        const  {organizerName,userMail,organizerPassWord}=req.body
+        const  {orgName,orgMail,orgPassWord,orgDetails}=req.body
 
-    const passHash = bcrypt.hash(organizerPassWord,12)
+    const passHash = bcrypt.hash(orgPassWord,12)
 
     const newOrgUser = new organizerModel({
-                            organizerName,
-                            userMail,
-                            organizerPassWord:passHash})
+        orgName,
+        orgMail,
+        orgPassWord:passHash,
+        orgDetails
+    })
      const savedUser =  await newOrgUser.save()
+     if(savedUser){
+        mailBot(orgMail)
+     }else{
+        !mailBot(orgMail)
+     }
+   
 
      return res.status(200).json({
         msg:"SUCCESSFUL",
