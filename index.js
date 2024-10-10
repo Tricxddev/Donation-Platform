@@ -27,7 +27,7 @@ app.get("/test",(req,res)=>{
     return res.status(200).json({msg:"Welldone Tricxddev"})
 })
 
-
+//ORGANISATION/USER REGISTRATION
 app.post("/regOrgUser",mailCheck,async(req,res)=>{
     try{
         const  {orgName,orgMail,orgPassWord,orgDetails}=req.body
@@ -60,6 +60,22 @@ app.post("/regOrgUser",mailCheck,async(req,res)=>{
 
 })
 
+//ORGANISATION/USER LOGIN
+app.get("/orgLogin&",mailCheck,async(req,res)=>{
+    const {orgMail,orgPassWord}=req.body
+    const verifyMail = await organizerModel.findOne({orgMail})
+    if(!verifyMail){
+        return res.status(401).json({msg:"INVALID ACCESS"})
+    }
+
+    const passDecode = await bcrypt.compare({orgPassWord},12)
+    if(!passDecode){
+        return res.status(400).json({msg:"INVALID ACCESS"})
+    }
+
+    return res.status(200).json({msg:"SUCCESSFUL"})
+
+})
 
 
 
