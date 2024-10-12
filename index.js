@@ -73,6 +73,10 @@ app.get("/orgLogin&",mailCheck,async(req,res)=>{
         return res.status(400).json({msg:"INVALID ACCESS"})
     }
 
+    const getOrgName = await organizerModel._id
+
+    const activelink = jwt.sign(getOrgName)
+
     return res.status(200).json({msg:"SUCCESSFUL"})
 
 })
