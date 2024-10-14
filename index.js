@@ -18,7 +18,7 @@ dbconnect()
 PORT = process.env.PORT || 5000
 
 app.listen(PORT,()=>{
-    console.log(`SERVER RUNNING ON PORT ,${PORT}`)
+    console.log(`SERVER RUNNING ON PORT: ${PORT}`)
 })
 
 app.use(express.json())
@@ -35,7 +35,6 @@ app.post("/regOrgUser",mailCheck,async(req,res)=>{
     if(mailCheck){
         return res.status(401).json({msg:"USER ALREADY EXISTS"})
     }
-
     const passHash = await bcrypt.hash(orgPassWord,12)
 
     const newOrgUser = new organizerModel({
@@ -44,11 +43,12 @@ app.post("/regOrgUser",mailCheck,async(req,res)=>{
         orgPassWord:passHash,
         orgDetails
     })
+    const token = await jwt.sign({orgMail},`${process.env.loginFrmMailToken}`,{expiresIn:"30m"})
      const savedUser =  await newOrgUser.save()
      if(savedUser){
         mailBot(orgMail,orgName)
      }else{
-        return res.status(402).json({msg:"SAVE USER NOT SUCCESSFUL"})
+        return res.status(402).json({msg:"USER NOT SAVED TO DATABASE"})
      }
    
      return res.status(200).json({
@@ -60,26 +60,31 @@ app.post("/regOrgUser",mailCheck,async(req,res)=>{
 
 })
 
-//ORGANISATION/USER LOGIN
-app.get("/orgLogin&",mailCheck,async(req,res)=>{
-    const {orgMail,orgPassWord}=req.body
-    const verifyMail = await organizerModel.findOne({orgMail})
-    if(!verifyMail){
-        return res.status(401).json({msg:"INVALID ACCESS"})
-    }
-
-    const passDecode = await bcrypt.compare({orgPassWord},12)
-    if(!passDecode){
-        return res.status(400).json({msg:"INVALID ACCESS"})
-    }
-
-    const getOrgName = await organizerModel._id
-
-    const activelink = jwt.sign(getOrgName)
-
-    return res.status(200).json({msg:"SUCCESSFUL"})
-
+//ACTIVATION LINK LOGIN
+app.post("/userFromMail/:token",async(req,res)=>{
+    const {}=req.params.token
 })
+
+//ORGANISATION/USER LOGIN
+// app.post("/orgLogin&",mailCheck,async(req,res)=>{
+//     const {orgMail,orgPassWord}=req.body
+//     const verifyMail = await organizerModel.findOne({orgMail})
+//     if(!verifyMail){
+//         return res.status(401).json({msg:"INVALID ACCESS"})
+//     }
+
+//     const passDecode = await bcrypt.compare(orgPassWord,verifyMail.orgPassWord)
+//     if(!passDecode){
+//         return res.status(400).json({msg:"INVALID ACCESS"})
+//     }
+
+//     const getOrgName = await verifyMail._id
+
+//     const accesslnk = jwt.sign({id:getOrgName},`${process.env.actiVelnk}`,{expiresIn:"60m"})
+
+//     return res.status(200).json({msg:"SUCCESSFUL"})
+
+// })
 
 
 
