@@ -1,6 +1,6 @@
-const { default: mongoose } = require("mongoose")
+
 const dotenv =require("dotenv")
-const  db=require("mongoose")
+const  mongoose=require("mongoose")
 
 const dbconnect = async()=>{
     try{
