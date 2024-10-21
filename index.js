@@ -87,4 +87,24 @@ app.post("/userFromMail/:token",async(req,res)=>{
 // })
 
 
+//ORGANIATION CREATE CAUSE
+app.post("/createCause",async(req,res)=>{
+    const {causeTitle,fromDate,toDate,desc,goalAmount,raiseAmount,}=req.body
+    const causeId = Math.floor(Math.random*1000)
+    
+    const newCause = new causeModel({
+        causeTitle,
+        causeId,
+        causeDuration:
+        {fromDate,
+        toDate},
+        desc,
+        goalAmount,
+        raiseAmount,
+        orgName,
+        org_Id
+    })
 
+
+    
+})
