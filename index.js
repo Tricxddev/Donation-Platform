@@ -89,22 +89,30 @@ app.post("/userFromMail/:token",async(req,res)=>{
 
 //ORGANIATION CREATE CAUSE
 app.post("/createCause",async(req,res)=>{
-    const {causeTitle,fromDate,toDate,desc,goalAmount,raiseAmount,}=req.body
-    const causeId = Math.floor(Math.random*1000)
+    const {causeTitle,fromDate,toDate,desc,goalAmount,raiseAmount}=req.body
+    const {_id}=req.params
+    const findId= organizerModel.findOne(_id)
+    const causeId = Math.floor(Math.random()*1000)
     
     const newCause = new causeModel({
         causeTitle,
         causeId,
         causeDuration:
-        {fromDate,
-        toDate},
+        {fromDate:new Date(fromDate),
+        toDate: new Date(toDate)},
         desc,
-        goalAmount,
-        raiseAmount,
-        orgName,
-        org_Id
+        goalAmount:Number(goalAmount),
+        raiseAmount:Number(raiseAmount),
+        orgName:findId.orgName,
+        org_Id:findId._id
     })
 
+   const causeSave = await newCause.save()
+
+    return res.status(200).json({
+        msg:"SUCCESSFUL",
+        causeSave
+    })
 
     
 })
