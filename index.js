@@ -3,6 +3,7 @@ const express =require("express")
 const dotenv =require("dotenv")
 const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt")
+const nano_id=require("nanoid")
 //paths
 const dbconnect=require("./db")
 const {causeModel,organizerModel}=require("./models/users_db")
@@ -66,35 +67,43 @@ app.post("/userFromMail/:token",async(req,res)=>{
 })
 
 //ORGANISATION/USER LOGIN
-// app.post("/orgLogin&",mailCheck,async(req,res)=>{
-//     const {orgMail,orgPassWord}=req.body
-//     const verifyMail = await organizerModel.findOne({orgMail})
-//     if(!verifyMail){
-//         return res.status(401).json({msg:"INVALID ACCESS"})
-//     }
+app.post("/orgLogin&",mailCheck,async(req,res)=>{
+    try {
+        const {orgMail,orgPassWord}=req.body
+        const verifyMail = await organizerModel.findOne({orgMail})
+        if(!verifyMail){
+        return res.status(401).json({msg:"INVALID ACCESS"})
+        }
 
-//     const passDecode = await bcrypt.compare(orgPassWord,verifyMail.orgPassWord)
-//     if(!passDecode){
-//         return res.status(400).json({msg:"INVALID ACCESS"})
-//     }
+        const passDecode = await bcrypt.compare(orgPassWord,verifyMail.orgPassWord)
+        if(!passDecode){
+        return res.status(400).json({msg:"INVALID ACCESS"})
+        }
 
-//     const getOrgName = await verifyMail._id
+        const getOrgId = await verifyMail._id
 
-//     const accesslnk = jwt.sign({id:getOrgName},`${process.env.actiVelnk}`,{expiresIn:"60m"})
+        const accesslnk = jwt.sign({id:getOrgId},`${process.env.actiVelnk}`,{expiresIn:"60m"})
 
-//     return res.status(200).json({msg:"SUCCESSFUL"})
-
-// })
+        return res.status(200).json({
+            msg:"SUCCESSFUL",
+            getOrgId,
+            OrgName:verifyMail.orgName,
+            accesslnk
+        })
+    } catch (error) { return res.status(400).json(error.message)}
+    })
 
 
 //ORGANIATION CREATE CAUSE
-app.post("/createCause",async(req,res)=>{
-    const {causeTitle,fromDate,toDate,desc,goalAmount,raiseAmount}=req.body
-    const {_id}=req.params
-    const findId= organizerModel.findOne(_id)
-    const causeId = Math.floor(Math.random()*1000)
+app.post("/createCause/:_id",async(req,res)=>{
+    try{
+        const {causeTitle,fromDate,toDate,desc,goalAmount,raiseAmount}=req.body
+        const bearer =req.header.split('')[1]
+        const {_id}=req.params
+        const findId= organizerModel.findOne(_id)
+        const causeId = Math.floor(Math.random()*1000)
     
-    const newCause = new causeModel({
+        const newCause = new causeModel({
         causeTitle,
         causeId,
         causeDuration:
@@ -105,14 +114,21 @@ app.post("/createCause",async(req,res)=>{
         raiseAmount:Number(raiseAmount),
         orgName:findId.orgName,
         org_Id:findId._id
-    })
+        })
 
-   const causeSave = await newCause.save()
+        const causeSave = await newCause.save()
 
-    return res.status(200).json({
+        return res.status(200).json({
         msg:"SUCCESSFUL",
         causeSave
-    })
-
-    
+        })
+    }catch(error){return res.status(400).json(error.message)}    
 })
+
+// //API to recover user password
+// app.get("/recoverPw",async(req,res)=>{
+//     const{orgMail}=req.body
+//     const findmail= await organizerModel.findOne(orgMail)
+//     const password = findmail.orgPassWord
+//     const comparePw = await bcrypt.hashSync
+// })
